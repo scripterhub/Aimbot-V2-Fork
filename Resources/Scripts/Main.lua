@@ -34,19 +34,19 @@ local queueonteleport = queue_on_teleport or syn.queue_on_teleport
 --// Script Settings
 
 Environment.Settings = {
-	SendNotifications = true,
-	SaveSettings = true, -- Re-execute upon changing
-	ReloadOnTeleport = true,
+	SendNotifications = false,
+	SaveSettings = false, -- Re-execute upon changing
+	ReloadOnTeleport = false,
 	Enabled = true,
 	TeamCheck = false,
 	AliveCheck = true,
-	WallCheck = false, -- Laggy
-	Sensitivity = 0, -- Animation length (in seconds) before fully locking onto target
+	WallCheck = true, -- Laggy
+	Sensitivity = 0.09, -- Animation length (in seconds) before fully locking onto target
 	ThirdPerson = false, -- Uses mousemoverel instead of CFrame to support locking in third person (could be choppy)
 	ThirdPersonSensitivity = 3, -- Boundary: 0.1 - 5
-	TriggerKey = "MouseButton2",
+	TriggerKey = "Z",
 	Toggle = false,
-	LockPart = "Head" -- Body part to lock on
+	LockPart = "UpperThorso"
 }
 
 Environment.FOVSettings = {
@@ -214,12 +214,7 @@ local function Load()
 				local Vector = Camera:WorldToViewportPoint(Environment.Locked.Character[Environment.Settings.LockPart].Position)
 				mousemoverel((Vector.X - UserInputService:GetMouseLocation().X) * Environment.Settings.ThirdPersonSensitivity, (Vector.Y - UserInputService:GetMouseLocation().Y) * Environment.Settings.ThirdPersonSensitivity)
 			else
-				if Environment.Settings.Sensitivity > 0 then
-					Animation = TweenService:Create(Camera, TweenInfo.new(Environment.Settings.Sensitivity, Enum.EasingStyle.Sine, Enum.EasingDirection.Out), {CFrame = CFrame.new(Camera.CFrame.Position, Environment.Locked.Character[Environment.Settings.LockPart].Position)})
-					Animation:Play()
-				else
 					Camera.CFrame = CFrame.new(Camera.CFrame.Position, Environment.Locked.Character[Environment.Settings.LockPart].Position)
-				end
 			end
 
 			Environment.FOVCircle.Color = GetColor(Environment.FOVSettings.LockedColor)
@@ -356,7 +351,7 @@ end
 
 if Environment.Settings.ReloadOnTeleport then
 	if queueonteleport then
-		queueonteleport(game:HttpGet("https://raw.githubusercontent.com/Exunys/Aimbot-V2/main/Resources/Scripts/Main.lua"))
+		queueonteleport(game:HttpGet("https://raw.githubusercontent.com/scripterhub/Aimbot-V2-Fork/main/Resources/Scripts/Main.lua"))
 	else
 		SendNotification(Title, "Your exploit does not support \"syn.queue_on_teleport()\"")
 	end
